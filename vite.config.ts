@@ -38,6 +38,9 @@ export default defineConfig({
           },
         ],
       },
+      devOptions: {
+        enabled: true
+      }
     }),
     {
       name: 'vercel-api-fallback',

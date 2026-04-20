@@ -7,8 +7,7 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "dev": "vercel dev",
-    "dev:frontend": "vite",
+    "dev": "vite",
     "build": "node scripts/generate-icons.mjs && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

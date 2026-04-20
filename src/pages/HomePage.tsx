@@ -23,11 +23,11 @@ export function HomePage() {
 
   const maxWeight = thisWeek.reduce((max, w) => Math.max(max, w.weight ?? 0), 0)
 
-  const uniqueDays = new Set(thisWeek.map((w) => w.date)).size
+  const uniqueDays = new Set(thisWeek.map((w) => w.date ? w.date.split('T')[0] : 'unknown')).size
 
   const recent = workouts.slice(0, 30)
   const grouped = recent.reduce<Record<string, WorkoutEntry[]>>((acc, entry) => {
-    const date = entry.date ?? 'unknown'
+    const date = (entry.date ? entry.date.split('T')[0] : 'unknown')
     if (!acc[date]) acc[date] = []
     acc[date].push(entry)
     return acc

@@ -8,7 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(dateStr: string | null): string {
   if (!dateStr) return 'No date'
-  const date = new Date(dateStr + 'T12:00:00')
+  const dateStrParsed = dateStr.includes('T') ? dateStr : dateStr + 'T12:00:00'
+  const date = new Date(dateStrParsed)
   const today = new Date()
   const yesterday = new Date(today)
   yesterday.setDate(yesterday.getDate() - 1)

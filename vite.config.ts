@@ -39,6 +39,33 @@ export default defineConfig({
         ],
       },
     }),
+    {
+      name: 'vercel-api-fallback',
+      configureServer(server) {
+        import('vite').then(({ loadEnv }) => {
+          Object.assign(process.env, loadEnv('', process.cwd(), ''));
+        });
+        
+        server.middlewares.use('/api', async (req, res, next) => {
+          (res as any).status = (code: number) => { res.statusCode = code; return res; };
+          (res as any).json = (data: any) => {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(data));
+          };
+
+          try {
+            if (req.url === '/workouts') {
+              const { default: handler } = await server.ssrLoadModule('/api/workouts.ts');
+              return handler(req as any, res as any);
+            }
+          } catch (err) {
+            console.error('API Error:', err);
+            return (res as any).status(500).json({ error: 'Internal Server Error' });
+          }
+          next();
+        });
+      }
+    }
   ],
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },

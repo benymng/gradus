@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Dumbbell, TrendingUp, Flame } from 'lucide-react'
+import { Dumbbell, TrendingUp, Flame, RefreshCw } from 'lucide-react'
 import { fetchWorkouts } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import type { WorkoutEntry } from '@/lib/types'
 
 export function HomePage() {
-  const { data: workouts = [], isLoading, error } = useQuery({
+  const { data: workouts = [], isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ['workouts'],
     queryFn: fetchWorkouts,
   })
@@ -62,15 +62,24 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 pb-6 max-w-lg mx-auto w-full">
-      <div className="pt-2">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Gradus</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          {new Date().toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </p>
+      <div className="pt-2 flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Gradus</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            {new Date().toLocaleDateString('en-US', {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+        </div>
+        <button
+          onClick={() => refetch()}
+          disabled={isFetching}
+          className="text-muted-foreground p-1 -mr-1 mt-1 disabled:opacity-40"
+        >
+          <RefreshCw className={`h-5 w-5 ${isFetching ? 'animate-spin' : ''}`} />
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-3">

@@ -3,10 +3,14 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints.js'
 
 export default async function handler(_req: VercelRequest, res: VercelResponse) {
-  const token = process.env.NOTION_TOKEN
-  const databaseId = process.env.NOTION_DATABASE_ID ?? '347f5a925c3a807193b4ce2e67218b59'
+  const token =
+    (req.headers['x-notion-token'] as string | undefined) || process.env.NOTION_TOKEN
+  const databaseId =
+    (req.headers['x-notion-database-id'] as string | undefined) ||
+    process.env.NOTION_DATABASE_ID ||
+    '347f5a925c3a807193b4ce2e67218b59'
 
-  if (!token) return res.status(500).json({ error: 'NOTION_TOKEN not set' })
+  if (!token) return res.status(401).json({ error: 'Notion token not configured' })
 
   const notion = new Client({ auth: token })
 

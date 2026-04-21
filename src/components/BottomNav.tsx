@@ -11,7 +11,10 @@ export function BottomNav() {
   const location = useLocation()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm z-50 pb-safe">
+    <nav
+      className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm z-50"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       <div className="flex max-w-lg mx-auto">
         {tabs.map(({ path, label, Icon }) => {
           const active = location.pathname === path

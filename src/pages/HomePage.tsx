@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Dumbbell, TrendingUp, Flame, Settings } from 'lucide-react'
+import { Dumbbell, TrendingUp, Flame } from 'lucide-react'
 import { fetchWorkouts } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
@@ -62,8 +62,7 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 pb-6 max-w-lg mx-auto w-full">
-      <div className="pt-2 flex items-start justify-between">
-        <div>
+      <div className="pt-2">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Gradus</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
           {new Date().toLocaleDateString('en-US', {
@@ -72,10 +71,6 @@ export function HomePage() {
             day: 'numeric',
           })}
         </p>
-        </div>
-        <Link to="/settings" className="text-muted-foreground p-1 -mr-1 mt-1">
-          <Settings className="h-5 w-5" />
-        </Link>
       </div>
 
       <div className="grid grid-cols-3 gap-3">

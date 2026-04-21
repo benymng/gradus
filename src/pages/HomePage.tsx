@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Dumbbell, TrendingUp, Flame, RefreshCw } from 'lucide-react'
 import { fetchWorkouts } from '@/lib/api'
@@ -8,10 +9,18 @@ import { Badge } from '@/components/ui/badge'
 import type { WorkoutEntry } from '@/lib/types'
 
 export function HomePage() {
-  const { data: workouts = [], isLoading, error, refetch, isFetching } = useQuery({
+  const queryClient = useQueryClient()
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const { data: workouts = [], isLoading, error } = useQuery({
     queryKey: ['workouts'],
     queryFn: fetchWorkouts,
   })
+
+  async function handleRefresh() {
+    setIsRefreshing(true)
+    await queryClient.fetchQuery({ queryKey: ['workouts'], queryFn: () => fetchWorkouts({ bust: true }) })
+    setIsRefreshing(false)
+  }
 
   const sevenDaysAgo = new Date()
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
@@ -74,11 +83,11 @@ export function HomePage() {
           </p>
         </div>
         <button
-          onClick={() => refetch()}
-          disabled={isFetching}
+          onClick={handleRefresh}
+          disabled={isRefreshing}
           className="text-muted-foreground p-1 -mr-1 mt-1 disabled:opacity-40"
         >
-          <RefreshCw className={`h-5 w-5 ${isFetching ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
         </button>
       </div>
 

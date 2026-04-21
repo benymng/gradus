@@ -1,7 +1,8 @@
 import type { WorkoutEntry } from './types'
 
-export async function fetchWorkouts(): Promise<WorkoutEntry[]> {
-  const res = await fetch('/api/workouts')
+export async function fetchWorkouts({ bust }: { bust?: boolean } = {}): Promise<WorkoutEntry[]> {
+  const url = bust ? `/api/workouts?_t=${Date.now()}` : '/api/workouts'
+  const res = await fetch(url)
   if (!res.ok) throw new Error('Failed to fetch workouts')
   return res.json() as Promise<WorkoutEntry[]>
 }

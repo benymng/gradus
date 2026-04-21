@@ -13,7 +13,7 @@ export function SearchPage() {
 
   const { data: workouts = [], isLoading } = useQuery({
     queryKey: ['workouts'],
-    queryFn: fetchWorkouts,
+    queryFn: () => fetchWorkouts(),
   })
 
   const summaries = getExerciseSummaries(workouts)

@@ -15,7 +15,7 @@ export function ExercisePage() {
 
   const { data: workouts = [] } = useQuery({
     queryKey: ['workouts'],
-    queryFn: fetchWorkouts,
+    queryFn: () => fetchWorkouts(),
   })
 
   const entries = workouts

@@ -13,7 +13,7 @@ export function HomePage() {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data: workouts = [], isLoading, error } = useQuery({
     queryKey: ['workouts'],
-    queryFn: fetchWorkouts,
+    queryFn: () => fetchWorkouts(),
   })
 
   async function handleRefresh() {

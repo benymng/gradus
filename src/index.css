@@ -43,6 +43,14 @@
   --ring: oklch(0.68 0.22 293);
 }
 
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 * { box-sizing: border-box; }
 
 body {

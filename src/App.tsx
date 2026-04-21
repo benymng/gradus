@@ -20,7 +20,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="flex flex-col min-h-svh bg-background">
+        <div className="flex flex-col min-h-svh bg-background pt-safe">
           <main className="flex-1 overflow-y-auto pb-20">
             <Suspense fallback={null}>
               <Routes>

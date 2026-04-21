@@ -19,7 +19,7 @@ export function ProgressChart({ entries, metric }: ProgressChartProps) {
     .filter((e) => e.date && (metric === 'weight' ? e.weight !== null : e.volume !== null))
     .sort((a, b) => new Date(a.date!).getTime() - new Date(b.date!).getTime())
     .map((e) => ({
-      date: new Date(e.date! + 'T12:00:00').toLocaleDateString('en-US', {
+      date: new Date(e.date!.slice(0, 10) + 'T12:00:00').toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
       }),

@@ -18,8 +18,12 @@ export function HomePage() {
 
   async function handleRefresh() {
     setIsRefreshing(true)
-    await queryClient.fetchQuery({ queryKey: ['workouts'], queryFn: () => fetchWorkouts({ bust: true }) })
-    setIsRefreshing(false)
+    try {
+      const fresh = await fetchWorkouts({ bust: true })
+      queryClient.setQueryData(['workouts'], fresh)
+    } finally {
+      setIsRefreshing(false)
+    }
   }
 
   const sevenDaysAgo = new Date()

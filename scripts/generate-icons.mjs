@@ -7,6 +7,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const publicDir = join(__dirname, '..', 'public')
 const svgSrc = join(publicDir, 'app-icon.svg')
 
+try {
+  execSync('rsvg-convert --version', { stdio: 'ignore' })
+} catch {
+  console.log('rsvg-convert not found, skipping icon generation (pre-generated icons will be used)')
+  process.exit(0)
+}
+
 mkdirSync(join(publicDir, 'icons'), { recursive: true })
 
 const sizes = [48, 72, 96, 128, 144, 152, 192, 256, 384, 512]

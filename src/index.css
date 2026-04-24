@@ -71,6 +71,7 @@
 * { box-sizing: border-box; }
 
 html {
+  height: 100vh;
   /* Prevent tap highlight flash on iOS */
   -webkit-tap-highlight-color: transparent;
 }

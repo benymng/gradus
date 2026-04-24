@@ -69,6 +69,17 @@ export default defineConfig({
               const { default: handler } = await server.ssrLoadModule('/api/workouts.ts');
               return handler(req as any, res as any);
             }
+            
+            // Handle /workouts/{id} routes
+            const workoutIdMatch = req.url?.match(/^\/workouts\/([^/?]+)/);
+            if (workoutIdMatch) {
+              const vercelReq = {
+                method: req.method,
+                query: { id: workoutIdMatch[1] },
+              } as any;
+              const { default: handler } = await server.ssrLoadModule('/api/workouts/[id].ts');
+              return handler(vercelReq, res as any);
+            }
           } catch (err) {
             console.error('API Error:', err);
             return (res as any).status(500).json({ error: 'Internal Server Error' });

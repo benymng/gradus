@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Dumbbell, TrendingUp, Flame, RefreshCw, ChevronRight } from 'lucide-react'
-import { fetchWorkouts } from '@/lib/api'
+import { fetchWorkouts, deleteWorkout } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { SwipeableCard } from '@/components/SwipeableCard'
 import type { WorkoutEntry } from '@/lib/types'
 
 export function HomePage() {
@@ -24,6 +25,13 @@ export function HomePage() {
     } finally {
       setIsRefreshing(false)
     }
+  }
+
+  async function handleDeleteEntry(id: string) {
+    await deleteWorkout(id)
+    queryClient.setQueryData(['workouts'], (old: WorkoutEntry[] | undefined) =>
+      old ? old.filter((w) => w.id !== id) : old,
+    )
   }
 
   const sevenDaysAgo = new Date()
@@ -147,52 +155,57 @@ export function HomePage() {
               </p>
               <div className="flex flex-col gap-1.5">
                 {grouped[date].map((entry) => (
-                  <Link key={entry.id} to={`/exercise/${encodeURIComponent(entry.name)}`}>
-                    <div
-                      className="flex items-center justify-between rounded-xl px-4 transition-all active:scale-[0.98] active:opacity-70"
-                      style={{
-                        background: 'oklch(0.11 0.011 278)',
-                        border: '1px solid oklch(1 0 0 / 7%)',
-                        minHeight: '52px',
-                      }}
-                    >
-                      <div className="min-w-0 flex-1 py-3">
-                        <p className="font-medium text-sm truncate leading-tight">{entry.name}</p>
-                        {entry.notes && (
-                          <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                            {entry.notes}
-                          </p>
-                        )}
+                  <SwipeableCard
+                    key={entry.id}
+                    onDelete={() => handleDeleteEntry(entry.id)}
+                  >
+                    <Link to={`/exercise/${encodeURIComponent(entry.name)}`}>
+                      <div
+                        className="flex items-center justify-between rounded-xl px-4 transition-all active:scale-[0.98] active:opacity-70"
+                        style={{
+                          background: 'oklch(0.11 0.011 278)',
+                          border: '1px solid oklch(1 0 0 / 7%)',
+                          minHeight: '52px',
+                        }}
+                      >
+                        <div className="min-w-0 flex-1 py-3">
+                          <p className="font-medium text-sm truncate leading-tight">{entry.name}</p>
+                          {entry.notes && (
+                            <p className="text-xs text-muted-foreground mt-0.5 truncate">
+                              {entry.notes}
+                            </p>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 ml-3 shrink-0">
+                          {entry.weight !== null && (
+                            <span
+                              className="font-bold text-base"
+                              style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}
+                            >
+                              {entry.weight}
+                            </span>
+                          )}
+                          {entry.unit && (
+                            <Badge
+                              className="text-xs font-semibold"
+                              style={{
+                                background: 'oklch(0.64 0.26 291 / 0.15)',
+                                color: 'oklch(0.80 0.18 291)',
+                                border: '1px solid oklch(0.64 0.26 291 / 0.25)',
+                                padding: '1px 7px',
+                              }}
+                            >
+                              {entry.unit}
+                            </Badge>
+                          )}
+                          {entry.reps !== null && (
+                            <span className="text-xs text-muted-foreground">×{entry.reps}</span>
+                          )}
+                          <ChevronRight className="h-3.5 w-3.5 text-muted-foreground opacity-40" />
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2 ml-3 shrink-0">
-                        {entry.weight !== null && (
-                          <span
-                            className="font-bold text-base"
-                            style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 700 }}
-                          >
-                            {entry.weight}
-                          </span>
-                        )}
-                        {entry.unit && (
-                          <Badge
-                            className="text-xs font-semibold"
-                            style={{
-                              background: 'oklch(0.64 0.26 291 / 0.15)',
-                              color: 'oklch(0.80 0.18 291)',
-                              border: '1px solid oklch(0.64 0.26 291 / 0.25)',
-                              padding: '1px 7px',
-                            }}
-                          >
-                            {entry.unit}
-                          </Badge>
-                        )}
-                        {entry.reps !== null && (
-                          <span className="text-xs text-muted-foreground">×{entry.reps}</span>
-                        )}
-                        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground opacity-40" />
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </SwipeableCard>
                 ))}
               </div>
             </div>

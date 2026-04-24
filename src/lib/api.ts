@@ -6,3 +6,8 @@ export async function fetchWorkouts({ bust }: { bust?: boolean } = {}): Promise<
   if (!res.ok) throw new Error('Failed to fetch workouts')
   return res.json() as Promise<WorkoutEntry[]>
 }
+
+export async function deleteWorkout(id: string): Promise<void> {
+  const res = await fetch(`/api/workouts/${id}`, { method: 'DELETE' })
+  if (!res.ok) throw new Error('Failed to delete workout')
+}

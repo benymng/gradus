@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "local": "vercel dev",
-    "build": "node scripts/generate-icons.mjs && tsc -b && vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "generate:icons": "node scripts/generate-icons.mjs"

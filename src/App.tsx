@@ -20,8 +20,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="flex flex-col min-h-svh bg-background" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-          <main className="flex-1 overflow-y-auto pb-20">
+        <div className="flex flex-col bg-background" style={{ height: '100svh', paddingTop: 'env(safe-area-inset-top)' }}>
+          <main className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
             <Suspense fallback={null}>
               <Routes>
                 <Route path="/" element={<HomePage />} />

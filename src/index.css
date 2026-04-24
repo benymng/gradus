@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap');
 @import "tailwindcss";
 
 @theme inline {
@@ -24,23 +25,39 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.09 0.008 280);
-  --foreground: oklch(0.97 0.005 280);
-  --card: oklch(0.14 0.008 280);
-  --card-foreground: oklch(0.97 0.005 280);
-  --primary: oklch(0.68 0.22 293);
-  --primary-foreground: oklch(0.09 0.008 280);
-  --secondary: oklch(0.20 0.010 280);
-  --secondary-foreground: oklch(0.97 0.005 280);
-  --muted: oklch(0.20 0.010 280);
-  --muted-foreground: oklch(0.58 0.010 280);
-  --accent: oklch(0.20 0.010 280);
-  --accent-foreground: oklch(0.97 0.005 280);
+  --radius: 0.875rem;
+
+  /* Core palette — deep charcoal with cool blue-violet tint */
+  --background: oklch(0.07 0.012 278);
+  --foreground: oklch(0.96 0.006 278);
+
+  /* Cards are elevated with a subtle gradient feel */
+  --card: oklch(0.11 0.011 278);
+  --card-foreground: oklch(0.96 0.006 278);
+
+  /* Primary: vivid violet — more saturated, punchy */
+  --primary: oklch(0.64 0.26 291);
+  --primary-foreground: oklch(0.07 0.012 278);
+
+  --secondary: oklch(0.17 0.012 278);
+  --secondary-foreground: oklch(0.96 0.006 278);
+
+  --muted: oklch(0.17 0.012 278);
+  --muted-foreground: oklch(0.52 0.014 278);
+
+  --accent: oklch(0.17 0.012 278);
+  --accent-foreground: oklch(0.96 0.006 278);
+
   --destructive: oklch(0.65 0.22 25);
-  --border: oklch(0.97 0 0 / 9%);
-  --input: oklch(0.97 0 0 / 13%);
-  --ring: oklch(0.68 0.22 293);
+
+  /* Borders: crisp, subtle */
+  --border: oklch(1 0 0 / 7%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.64 0.26 291);
+
+  /* Typography */
+  --font-display: 'Barlow Condensed', system-ui, sans-serif;
+  --font-body: 'Barlow', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
 }
 
 @utility pt-safe {
@@ -53,18 +70,86 @@
 
 * { box-sizing: border-box; }
 
+html {
+  /* Prevent tap highlight flash on iOS */
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
-  background-color: oklch(0.09 0.008 280);
-  color: oklch(0.97 0.005 280);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  background-color: oklch(0.07 0.012 278);
+  color: oklch(0.96 0.006 278);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
+  /* Prevent iOS bounce on the body */
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
 }
 
 #root {
   min-height: 100svh;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* Display font for big stats */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Page enter animation */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-in 0.2s ease-out both;
+}
+
+/* Stat card number shimmer on load */
+@keyframes count-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.stat-number {
+  animation: count-in 0.3s ease-out both;
+}
+
+/* Subtle noise texture overlay for depth */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+#root > * {
+  position: relative;
+  z-index: 1;
 }

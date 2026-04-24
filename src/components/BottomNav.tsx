@@ -12,8 +12,13 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 backdrop-blur-sm z-50"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      className="shrink-0 border-t border-border z-50"
+      style={{
+        background: 'oklch(0.09 0.011 278 / 0.96)',
+        backdropFilter: 'blur(20px) saturate(1.4)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.4)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+      }}
     >
       <div className="flex max-w-lg mx-auto">
         {tabs.map(({ path, label, Icon }) => {
@@ -23,12 +28,28 @@ export function BottomNav() {
               key={path}
               to={path}
               className={cn(
-                'flex flex-1 flex-col items-center justify-center gap-1 py-3 text-xs font-medium transition-colors',
+                'flex flex-1 flex-col items-center justify-center gap-1 text-xs font-medium transition-colors select-none',
                 active ? 'text-primary' : 'text-muted-foreground',
               )}
+              style={{ minHeight: '56px', paddingTop: '10px', paddingBottom: '10px' }}
             >
-              <Icon className="h-5 w-5" strokeWidth={active ? 2.5 : 1.75} />
-              <span>{label}</span>
+              <div className="relative flex items-center justify-center">
+                {active && (
+                  <span
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background: 'oklch(0.64 0.26 291 / 0.15)',
+                      width: '40px',
+                      height: '32px',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                  />
+                )}
+                <Icon className="relative h-5 w-5" strokeWidth={active ? 2.5 : 1.75} />
+              </div>
+              <span className={cn('tracking-wide', active ? 'font-semibold' : '')}>{label}</span>
             </Link>
           )
         })}

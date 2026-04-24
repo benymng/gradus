@@ -51,7 +51,16 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 body {
   margin: 0;
@@ -61,10 +70,75 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  min-height: 100dvh;
+  min-height: 100vh;
 }
 
 #root {
-  min-height: 100svh;
+  min-height: 100dvh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+/* iOS PWA skeleton loading animation */
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    oklch(0.20 0.010 280) 0%,
+    oklch(0.24 0.010 280) 50%,
+    oklch(0.20 0.010 280) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Prevent iOS text size adjustment on orientation change */
+@media screen and (orientation: landscape) {
+  body {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Smooth page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 150ms ease-in;
 }

@@ -7,6 +7,7 @@ import { getExerciseSummaries, formatDate } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { SkeletonWorkoutCard } from '@/components/ui/skeleton'
 
 export function SearchPage() {
   const [query, setQuery] = useState('')
@@ -37,14 +38,16 @@ export function SearchPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="h-7 w-7 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+        <div className="flex flex-col gap-3">
+          {[...Array(5)].map((_, i) => (
+            <SkeletonWorkoutCard key={i} />
+          ))}
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {filtered.map((summary) => (
             <Link key={summary.name} to={`/exercise/${encodeURIComponent(summary.name)}`}>
-              <Card className="active:opacity-60 transition-opacity cursor-pointer">
+              <Card className="card-press active:opacity-60 transition-opacity cursor-pointer">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="min-w-0 flex-1">
                     <p className="font-medium truncate">{summary.name}</p>

@@ -6,6 +6,7 @@ import { fetchWorkouts } from '@/lib/api'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { SkeletonStatCard, SkeletonWorkoutCard } from '@/components/ui/skeleton'
 import type { WorkoutEntry } from '@/lib/types'
 
 export function HomePage() {
@@ -51,10 +52,26 @@ export function HomePage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-1 items-center justify-center min-h-[60vh]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-          <p className="text-sm text-muted-foreground">Loading workouts…</p>
+      <div className="flex flex-col gap-6 p-4 pb-6 max-w-lg mx-auto w-full">
+        <div className="pt-2 flex items-start justify-between">
+          <div>
+            <div className="skeleton-line h-8 w-24 rounded mb-1.5" />
+            <div className="skeleton-line h-4 w-36 rounded" />
+          </div>
+          <div className="skeleton-circle h-8 w-8 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+          <SkeletonStatCard />
+        </div>
+        <div>
+          <div className="skeleton-line h-3 w-28 rounded mb-3" />
+          <div className="flex flex-col gap-3">
+            <SkeletonWorkoutCard />
+            <SkeletonWorkoutCard />
+            <SkeletonWorkoutCard />
+          </div>
         </div>
       </div>
     )
@@ -130,7 +147,7 @@ export function HomePage() {
               <div className="flex flex-col gap-2">
                 {grouped[date].map((entry) => (
                   <Link key={entry.id} to={`/exercise/${encodeURIComponent(entry.name)}`}>
-                    <Card className="active:opacity-60 transition-opacity cursor-pointer">
+                    <Card className="card-press active:opacity-60 transition-opacity cursor-pointer">
                       <CardContent className="p-4 flex items-center justify-between">
                         <div className="min-w-0 flex-1">
                           <p className="font-medium text-sm truncate">{entry.name}</p>

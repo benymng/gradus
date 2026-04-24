@@ -74,6 +74,7 @@ body {
   touch-action: manipulation;
   min-height: 100dvh;
   min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 #root {

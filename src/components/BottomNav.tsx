@@ -1,10 +1,11 @@
-import { Home, Search } from 'lucide-react'
+import { Home, Search, PlusCircle } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 const tabs = [
   { path: '/', label: 'Home', Icon: Home },
   { path: '/search', label: 'Search', Icon: Search },
+  { path: '/add', label: 'Add', Icon: PlusCircle },
 ]
 
 export function BottomNav() {

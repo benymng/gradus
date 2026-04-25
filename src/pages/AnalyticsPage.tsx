@@ -234,46 +234,6 @@ export function AnalyticsPage() {
         </div>
       </Card>
 
-      {/* ── Volume by Exercise ── */}
-      <Card style={CARD_STYLE} className="p-4">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={SECTION_LABEL}>
-          Total Volume by Exercise
-        </p>
-        {volumeByExercise.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">No volume data yet</p>
-        ) : (
-          <ResponsiveContainer width="100%" height={volumeByExercise.length * 34 + 10}>
-            <BarChart
-              data={volumeByExercise}
-              layout="vertical"
-              margin={{ top: 0, right: 12, bottom: 0, left: 0 }}
-            >
-              <XAxis
-                type="number"
-                tick={{ fill: 'oklch(0.48 0.010 280)', fontSize: 10 }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}k` : String(v)}
-              />
-              <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: 'oklch(0.78 0.010 280)', fontSize: 11 }}
-                axisLine={false}
-                tickLine={false}
-                width={90}
-              />
-              <Tooltip
-                contentStyle={TOOLTIP_STYLE}
-                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
-                formatter={(v) => [`${Number(v).toLocaleString()} lbs`, 'Volume']}
-              />
-              <Bar dataKey="volume" fill="oklch(0.64 0.26 291)" radius={[0, 4, 4, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        )}
-      </Card>
-
       {/* ── Strength Progression ── */}
       <Card style={CARD_STYLE} className="p-4">
         <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={SECTION_LABEL}>
@@ -341,6 +301,46 @@ export function AnalyticsPage() {
               </div>
             ))}
           </div>
+        )}
+      </Card>
+
+      {/* ── Volume by Exercise ── */}
+      <Card style={CARD_STYLE} className="p-4">
+        <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={SECTION_LABEL}>
+          Total Volume by Exercise
+        </p>
+        {volumeByExercise.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">No volume data yet</p>
+        ) : (
+          <ResponsiveContainer width="100%" height={volumeByExercise.length * 34 + 10}>
+            <BarChart
+              data={volumeByExercise}
+              layout="vertical"
+              margin={{ top: 0, right: 12, bottom: 0, left: 0 }}
+            >
+              <XAxis
+                type="number"
+                tick={{ fill: 'oklch(0.48 0.010 280)', fontSize: 10 }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => v >= 1000 ? `${(v / 1000).toFixed(1)}k` : String(v)}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                tick={{ fill: 'oklch(0.78 0.010 280)', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+                width={90}
+              />
+              <Tooltip
+                contentStyle={TOOLTIP_STYLE}
+                cursor={{ fill: 'rgba(255,255,255,0.04)' }}
+                formatter={(v) => [`${Number(v).toLocaleString()} lbs`, 'Volume']}
+              />
+              <Bar dataKey="volume" fill="oklch(0.64 0.26 291)" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         )}
       </Card>
     </div>

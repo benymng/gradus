@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('@/pages/HomePage').then((m) => ({ default: m
 const SearchPage = lazy(() => import('@/pages/SearchPage').then((m) => ({ default: m.SearchPage })))
 const ExercisePage = lazy(() => import('@/pages/ExercisePage').then((m) => ({ default: m.ExercisePage })))
 const QuickAddPage = lazy(() => import('@/pages/QuickAddPage').then((m) => ({ default: m.QuickAddPage })))
+const AnalyticsPage = lazy(() => import('@/pages/AnalyticsPage').then((m) => ({ default: m.AnalyticsPage })))
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ export default function App() {
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/exercise/:name" element={<ExercisePage />} />
                 <Route path="/add" element={<QuickAddPage />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
               </Routes>
             </Suspense>
           </main>

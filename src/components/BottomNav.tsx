@@ -1,9 +1,10 @@
-import { Home, Search, PlusCircle } from 'lucide-react'
+import { Home, Search, PlusCircle, BarChart2 } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 
 const tabs = [
   { path: '/', label: 'Home', Icon: Home },
+  { path: '/analytics', label: 'Stats', Icon: BarChart2 },
   { path: '/search', label: 'Search', Icon: Search },
   { path: '/add', label: 'Add', Icon: PlusCircle },
 ]

@@ -100,8 +100,10 @@ export function SearchPage() {
                   <div className="min-w-0 flex-1 py-3">
                     <p className="font-medium text-sm truncate leading-tight">{summary.name}</p>
                     <p className="text-xs mt-0.5" style={{ color: 'oklch(0.52 0.014 278)' }}>
-                      {formatDate(summary.lastDate)} · {summary.totalSets}{' '}
-                      {summary.totalSets === 1 ? 'set' : 'sets'}
+                      {formatDate(summary.lastDate)} ·{' '}
+                      {summary.lastReps !== null
+                        ? `${summary.lastReps} ${summary.lastReps === 1 ? 'rep' : 'reps'}`
+                        : 'No reps'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 ml-3 shrink-0">

@@ -55,7 +55,7 @@ export function SearchPage() {
               height: '44px',
               color: 'inherit',
               fontFamily: 'inherit',
-              fontSize: '15px',
+              fontSize: '16px',
               transition: 'border-color 0.15s',
             }}
             onFocus={(e) => {

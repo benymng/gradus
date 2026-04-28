@@ -42,7 +42,17 @@ export function HomePage() {
     return new Date(w.date) >= sevenDaysAgo
   })
 
-  const maxWeight = thisWeek.reduce((max, w) => Math.max(max, w.weight ?? 0), 0)
+  const fourteenDaysAgo = new Date()
+  fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14)
+
+  const previousWeek = workouts.filter((w) => {
+    if (!w.date) return false
+    const date = new Date(w.date)
+    return date >= fourteenDaysAgo && date < sevenDaysAgo
+  })
+
+  const averageWeightChange = getAverageWeightChange(thisWeek, previousWeek)
+  const volumeChange = getVolumeChange(thisWeek, previousWeek)
 
   const uniqueDays = new Set(thisWeek.map((w) => w.date ? w.date.split('T')[0] : 'unknown')).size
 
@@ -117,9 +127,9 @@ export function HomePage() {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-2.5">
         <StatCard
-          icon={<Dumbbell className="h-3.5 w-3.5" style={{ color: 'oklch(0.64 0.26 291)' }} />}
-          value={thisWeek.length}
-          label="sets"
+          icon={<TrendingUp className="h-3.5 w-3.5" style={{ color: 'oklch(0.72 0.18 155)' }} />}
+          value={formatPercentChange(averageWeightChange)}
+          label="avg wt"
           delay="0ms"
         />
         <StatCard
@@ -129,9 +139,9 @@ export function HomePage() {
           delay="60ms"
         />
         <StatCard
-          icon={<TrendingUp className="h-3.5 w-3.5" style={{ color: 'oklch(0.72 0.18 155)' }} />}
-          value={maxWeight > 0 ? maxWeight : '—'}
-          label="top wt"
+          icon={<Dumbbell className="h-3.5 w-3.5" style={{ color: 'oklch(0.64 0.26 291)' }} />}
+          value={formatPercentChange(volumeChange)}
+          label="volume"
           delay="120ms"
         />
       </div>
@@ -225,6 +235,64 @@ export function HomePage() {
       </div>
     </div>
   )
+}
+
+function getAverageWeightChange(thisWeek: WorkoutEntry[], previousWeek: WorkoutEntry[]) {
+  const currentAverages = getAverageWeightsByExercise(thisWeek)
+  const previousAverages = getAverageWeightsByExercise(previousWeek)
+  const changes: number[] = []
+
+  for (const [exercise, currentAverage] of currentAverages) {
+    const previousAverage = previousAverages.get(exercise)
+    if (!previousAverage) continue
+    changes.push(((currentAverage - previousAverage) / previousAverage) * 100)
+  }
+
+  if (changes.length === 0) return null
+
+  return changes.reduce((sum, change) => sum + change, 0) / changes.length
+}
+
+function getAverageWeightsByExercise(entries: WorkoutEntry[]) {
+  const groups = new Map<string, { total: number; count: number }>()
+
+  for (const entry of entries) {
+    if (entry.weight === null || entry.weight <= 0) continue
+    const key = `${entry.name.toLowerCase()}-${entry.unit ?? ''}`
+    const group = groups.get(key) ?? { total: 0, count: 0 }
+    group.total += entry.weight
+    group.count += 1
+    groups.set(key, group)
+  }
+
+  return new Map(
+    Array.from(groups, ([exercise, group]) => [exercise, group.total / group.count]),
+  )
+}
+
+function getVolumeChange(thisWeek: WorkoutEntry[], previousWeek: WorkoutEntry[]) {
+  const currentVolume = getTotalVolume(thisWeek)
+  const previousVolume = getTotalVolume(previousWeek)
+
+  if (previousVolume <= 0) return null
+
+  return ((currentVolume - previousVolume) / previousVolume) * 100
+}
+
+function getTotalVolume(entries: WorkoutEntry[]) {
+  return entries.reduce((total, entry) => {
+    if (entry.volume !== null) return total + entry.volume
+    if (entry.weight !== null && entry.reps !== null) return total + entry.weight * entry.reps
+    return total
+  }, 0)
+}
+
+function formatPercentChange(value: number | null) {
+  if (value === null || !Number.isFinite(value)) return '—'
+  const rounded = Math.abs(value) < 10 ? value.toFixed(1) : Math.round(value).toString()
+  const prefix = value > 0 ? '+' : ''
+
+  return `${prefix}${rounded}%`
 }
 
 function StatCard({
